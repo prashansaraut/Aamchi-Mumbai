@@ -1,0 +1,330 @@
+/* =========================================================
+   Amchi Mumbai: responsive city guide
+   Approach: mobile-first. Base styles are for phones; larger
+   screens are layered on with min-width media queries.
+
+   Breakpoints
+   - Base          under 600px   phones, one column
+   - 600px and up  large phones and small tablets, two columns
+   - 900px and up  tablets in landscape and laptops, full nav, three columns
+   - 1200px and up desktops, wider spacing and type
+
+   Contents
+   1. Tokens        2. Base          3. Layout helpers   4. Header
+   5. Hero          6. At a glance   7. Sections         8. Cards, grids, transport
+   9. Banner image 10. Train table  11. Plan + aside     12. Footer
+   13. Breakpoints 14. Feature queries (hover, orientation, motion, print)
+   ========================================================= */
+
+/* ---------- 1. Tokens ---------- */
+:root {
+  --ink: #17130f;        /* kaali: taxi black */
+  --taxi: #ffc20e;       /* peeli: taxi yellow */
+  --sea: #0a5c78;        /* Arabian Sea blue */
+  --sea-dark: #07394d;
+  --signal: #d7301f;     /* local-train signal red */
+  --paper: #fffbf0;
+  --white: #ffffff;
+  --line: #eadfc2;
+
+  --font-head: "Yatra One", "Noto Serif Devanagari", Georgia, serif;
+  --font-body: "Mukta", "Segoe UI", system-ui, sans-serif;
+
+  --gutter: clamp(1rem, 5vw, 4rem);                 /* fluid side padding */
+  --section-space: clamp(2.5rem, 7vw, 5.5rem);      /* fluid vertical padding */
+  --radius: 0.75rem;
+  --shadow: 4px 4px 0 var(--ink);                   /* hard offset shadow */
+  --checker: repeating-conic-gradient(var(--ink) 0 25%, var(--taxi) 0 50%) 0 0 / 20px 20px;
+}
+
+/* ---------- 2. Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 clamp(1rem, 0.95rem + 0.3vw, 1.15rem) / 1.6 var(--font-body);
+}
+
+/* Fluid images: never wider than their container, keep their ratio */
+img, picture, svg { display: block; max-width: 100%; height: auto; }
+
+h1, h2, h3 { font-family: var(--font-head); font-weight: 400; line-height: 1.12; margin: 0 0 0.5em; }
+h1 { font-size: clamp(2.3rem, 1.4rem + 5vw, 4.6rem); }
+h2 { font-size: clamp(1.7rem, 1.2rem + 2.4vw, 2.8rem); }
+h3 { font-size: clamp(1.2rem, 1.1rem + 0.6vw, 1.5rem); }
+p { margin: 0 0 1em; }
+ul, ol { margin: 0; padding: 0; }
+a { color: inherit; }
+
+a:focus-visible, button:focus-visible {
+  outline: 3px solid var(--sea);
+  outline-offset: 3px;
+}
+
+/* ---------- 3. Layout helpers ---------- */
+/* Content column: fluid, capped at 72rem, centred */
+.wrap { width: min(100% - 2 * var(--gutter), 72rem); margin-inline: auto; }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
+.skip-link {
+  position: absolute; left: 1rem; top: -4rem; z-index: 100;
+  background: var(--taxi); padding: 0.6rem 1rem; font-weight: 700; border: 2px solid var(--ink);
+}
+.skip-link:focus { top: 1rem; }
+
+.eyebrow {
+  font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  font-size: 0.85rem; margin-bottom: 0.6rem; color: var(--sea);
+}
+
+.btn {
+  display: inline-block; padding: 0.8rem 1.4rem; background: var(--ink); color: var(--taxi);
+  font-weight: 700; text-decoration: none; border: 2px solid var(--ink);
+  border-radius: var(--radius); box-shadow: 3px 3px 0 var(--sea);
+}
+.btn-ghost { background: transparent; color: var(--ink); box-shadow: none; }
+
+/* ---------- 4. Header ---------- */
+/* No JavaScript is needed: on phones the links simply wrap into pill buttons
+   under the logo, and from 900px they sit in one row beside it. */
+.site-header {
+  position: relative;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 0.6rem 1rem;
+  padding: 0.8rem var(--gutter) 1.2rem;
+  background: var(--ink); color: #fff;
+}
+/* kaali-peeli checker stripe along the bottom edge */
+.site-header::after { content: ""; position: absolute; inset: auto 0 0 0; height: 10px; background: var(--checker); }
+
+.brand { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; }
+.brand-mark {
+  display: grid; place-items: center; width: 2.4rem; height: 2.4rem;
+  background: var(--taxi); color: var(--ink); border-radius: 50%;
+  font: 400 1.5rem var(--font-head);
+}
+.brand-name { font: 400 1.35rem var(--font-head); }
+
+#site-nav { flex-basis: 100%; }
+#site-nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+#site-nav a {
+  display: block; padding: 0.5rem 0.9rem; text-decoration: none; font-weight: 600; font-size: 0.95rem;
+  border: 2px solid rgba(255, 255, 255, 0.35); border-radius: 999px;
+}
+#site-nav a:hover { background: var(--taxi); border-color: var(--taxi); color: var(--ink); }
+
+/* ---------- 5. Hero ---------- */
+/* Warli folk-art pattern (Maharashtra) as a subtle tiled background */
+.hero { background: var(--taxi) url("assets/warli-ink.svg"); }
+.hero-inner { display: grid; gap: 2rem; align-items: center; padding-block: var(--section-space); }
+.lead { font-size: clamp(1.1rem, 1rem + 0.6vw, 1.4rem); max-width: 34ch; }
+.actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 1.5rem 0 0; }
+.hero-art img {
+  width: 100%; max-height: 70vh; object-fit: cover;
+  border: 2px solid var(--ink); border-radius: var(--radius); box-shadow: var(--shadow);
+}
+
+/* ---------- 6. At a glance ---------- */
+.glance { background: var(--ink); color: #fff; padding-block: 1.5rem; }
+.glance-list { list-style: none; display: grid; gap: 1.2rem 2rem; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); }
+.glance .label { display: block; color: var(--taxi); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+.glance .value { display: block; font-size: 1.1rem; }
+
+/* ---------- 7. Sections ---------- */
+.section { padding-block: var(--section-space); }
+.section-alt { background: #fff3cc; border-block: 2px solid var(--ink); }
+.section-dark { background: var(--sea-dark) url("assets/warli-light.svg"); color: #fff; }
+.section-dark .eyebrow { color: var(--taxi); }
+.section-dark h2, .section-dark h3 { color: var(--taxi); }
+.section-head { max-width: 46rem; margin-bottom: 2rem; }
+
+/* ---------- 8. Cards, grids, transport ---------- */
+.grid { list-style: none; display: grid; gap: 1.25rem; grid-template-columns: 1fr; }
+
+.card, .place-card {
+  display: grid; grid-template-columns: 1fr; grid-template-rows: auto 1fr; overflow: hidden; height: 100%;
+  background: var(--white); border: 2px solid var(--ink);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+}
+/* Card illustration with a Devanagari name chip on top */
+.card-media { position: relative; border-bottom: 2px solid var(--ink); background: var(--taxi); }
+.card-media img { width: 100%; aspect-ratio: 5 / 3; object-fit: cover; }
+.script {
+  position: absolute; left: 0.6rem; bottom: 0.6rem; max-width: calc(100% - 1.2rem);
+  padding: 0.05rem 0.8rem 0.15rem; background: var(--taxi); color: var(--ink);
+  border: 2px solid var(--ink); border-radius: 999px;
+  font: 400 clamp(1rem, 0.9rem + 0.5vw, 1.25rem) / 1.3 var(--font-head);
+}
+.card:nth-child(3n + 2) .script, .place:nth-child(3n + 2) .script { background: var(--sea); color: #fff; }
+.card:nth-child(3n) .script, .place:nth-child(3n) .script { background: var(--signal); color: #fff; }
+.card-body { padding: 1.1rem 1.2rem 1.3rem; }
+.card-body p:last-child { margin-bottom: 0; }
+
+.tags { list-style: none; display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.8rem; }
+.tags li { font-size: 0.8rem; font-weight: 700; padding: 0.15rem 0.6rem; border: 2px solid var(--ink); border-radius: 999px; background: var(--paper); }
+.note { font-size: 0.95rem; font-weight: 600; color: var(--sea); }
+
+/* Container queries: each place card reacts to the width of its own
+   container (the list item), not to the screen width. */
+.place { container-type: inline-size; }
+@container (min-width: 26rem) {
+  .place-card { grid-template-columns: 11rem 1fr; grid-template-rows: auto; }
+  .place-card .card-media { min-height: 9rem; border-bottom: 0; border-right: 2px solid var(--ink); }
+  .place-card .card-media img { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; }
+}
+
+/* Getting around: icon cards on a flexible auto-fit grid (no media query needed) */
+.transport { list-style: none; display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
+.transport li {
+  display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 1.2rem;
+  background: var(--white); border: 2px solid var(--ink); border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.transport img { flex: none; width: 3.5rem; height: 3.5rem; }
+.transport h3 { margin-bottom: 0.2em; }
+.transport p { margin: 0; }
+
+/* ---------- 9. Banner image ---------- */
+.banner { margin: 0; position: relative; background: var(--ink); }
+.banner img { width: 100%; height: auto; min-height: 12rem; object-fit: cover; }
+.banner figcaption {
+  position: absolute; left: var(--gutter); bottom: 1rem; max-width: calc(100% - 2 * var(--gutter));
+  background: var(--taxi); color: var(--ink); border: 2px solid var(--ink);
+  padding: 0.3rem 0.8rem; font-size: 0.85rem; font-weight: 600; border-radius: var(--radius);
+}
+
+/* ---------- 10. Train table ---------- */
+/* Phones: each row becomes a stacked card and the labels come from data-label.
+   600px and up: a normal table. */
+.line-table { width: 100%; border-collapse: collapse; color: var(--ink); }
+.line-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.line-table tr { display: block; margin-bottom: 1rem; background: var(--white); border: 2px solid var(--taxi); border-radius: var(--radius); overflow: hidden; }
+.line-table th[scope="row"] { display: block; padding: 0.7rem 1rem; background: var(--taxi); font: 400 1.4rem var(--font-head); text-align: left; }
+.line-table td { display: block; padding: 0.6rem 1rem; border-top: 1px solid var(--line); }
+.line-table td::before { content: attr(data-label); display: block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sea); }
+
+/* The train illustration is cropped (not squashed) on narrow screens */
+.train-art { margin: 0 0 2rem; }
+.train-art img { width: 100%; height: auto; min-height: 7rem; object-fit: cover; object-position: right center; }
+
+.tips { margin-top: 2rem; padding: 1.2rem 1.4rem; border: 2px dashed var(--taxi); border-radius: var(--radius); }
+.tips ul { padding-left: 1.2rem; }
+.tips li { margin-bottom: 0.4rem; }
+
+/* ---------- 11. Plan + aside ---------- */
+.plan { display: grid; gap: 2.5rem; }
+.timeline { list-style: none; border-left: 4px solid var(--ink); margin-left: 0.4rem; }
+.timeline li { position: relative; display: grid; gap: 0.2rem; padding: 0 0 1.6rem 1.6rem; }
+.timeline li::before {
+  content: ""; position: absolute; left: -0.95rem; top: 0.25rem;
+  width: 1.3rem; height: 1.3rem; background: var(--taxi); border: 3px solid var(--ink); border-radius: 50%;
+}
+.timeline .time { font-weight: 700; color: var(--sea); }
+.timeline h3 { margin-bottom: 0.2em; }
+.timeline p { margin: 0; }
+
+.plan-aside { align-self: start; padding: 1.4rem; background: var(--taxi); border: 2px solid var(--ink); border-radius: var(--radius); box-shadow: var(--shadow); }
+.plan-aside .taxi { width: min(65%, 12rem); margin-bottom: 0.6rem; }
+.plan-aside h2 { font-size: 1.6rem; }
+.plan-aside ul { padding-left: 1.2rem; }
+.plan-aside li { margin-bottom: 0.4rem; }
+
+/* ---------- 12. Footer ---------- */
+.site-footer { position: relative; margin-top: 0; padding: calc(var(--section-space) * 0.7) 0 1.5rem; background: var(--ink); color: #fff; }
+.site-footer::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 10px; background: var(--checker); }
+.footer-inner { display: grid; gap: 1.5rem; padding-top: 1rem; }
+.footer-title { font: 400 1.6rem var(--font-head); color: var(--taxi); margin-bottom: 0.3rem; }
+.site-footer ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem 1.2rem; }
+.site-footer a { color: #fff; display: inline-block; padding-block: 0.35rem; }   /* bigger tap area */
+.layout-note { font-size: 0.9rem; }
+.layout-note strong { color: var(--taxi); }
+.layout-note strong::after { content: "Mobile (under 600px)"; }
+.copy { margin: 1.5rem auto 0; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.25); font-size: 0.9rem; }
+
+/* ---------- 13. Breakpoints ---------- */
+
+/* 600px and up: large phones and small tablets */
+@media (min-width: 600px) {
+  .food-grid { grid-template-columns: repeat(2, 1fr); }   /* places stay in one column; their cards go horizontal via the container query */
+
+  /* train rows turn back into a real table */
+  .line-table thead { position: static; width: auto; height: auto; overflow: visible; clip-path: none; }
+  .line-table tr { display: table-row; margin: 0; border: 0; border-radius: 0; background: transparent; }
+  .line-table { background: var(--white); border: 2px solid var(--taxi); border-radius: var(--radius); overflow: hidden; }
+  .line-table th, .line-table td { display: table-cell; padding: 0.9rem 1rem; text-align: left; border-top: 1px solid var(--line); vertical-align: top; }
+  .line-table thead th { background: var(--taxi); color: var(--ink); font-weight: 700; border-top: 0; }
+  .line-table th[scope="row"] { display: table-cell; background: #fff3cc; font-size: 1.25rem; }
+  .line-table td::before { display: none; }
+
+  .footer-inner { grid-template-columns: 2fr 1fr; }
+  .layout-note { grid-column: 1 / -1; }
+  .layout-note strong::after { content: "Large phone or small tablet (600px+)"; }
+}
+
+/* 600px to 899px only: two tidy columns instead of 3 + 1 orphan */
+@media (min-width: 600px) and (max-width: 899.98px) {
+  .glance-list { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* 900px and up: tablets in landscape, laptops */
+@media (min-width: 900px) {
+  /* header: sticky, with the links in one row beside the logo */
+  .site-header { position: sticky; top: 0; z-index: 50; }
+  #site-nav { flex-basis: auto; }
+  #site-nav ul { gap: 1.6rem; }
+  #site-nav a { padding: 0.3rem 0; border: 0; border-bottom: 3px solid transparent; border-radius: 0; font-size: 1rem; }
+  #site-nav a:hover { background: none; color: #fff; border-bottom-color: var(--taxi); }
+
+  .hero-inner { grid-template-columns: 1fr 1.2fr; }
+  .food-grid { grid-template-columns: repeat(3, 1fr); }
+  .places-grid { grid-template-columns: repeat(2, 1fr); }
+  .plan { grid-template-columns: 2fr 1fr; }
+  .plan-aside { position: sticky; top: 6rem; }
+  .footer-inner { grid-template-columns: 2fr 1fr 1.5fr; align-items: start; }
+  .layout-note { grid-column: auto; }
+  .layout-note strong::after { content: "Tablet landscape or laptop (900px+)"; }
+}
+
+/* 1200px and up: desktops */
+@media (min-width: 1200px) {
+  .places-grid { grid-template-columns: repeat(3, 1fr); }
+  .hero-inner { gap: 3.5rem; }
+  .card-body { padding: 1.3rem 1.4rem 1.5rem; }
+  .layout-note strong::after { content: "Desktop (1200px+)"; }
+}
+
+/* ---------- 14. Feature queries ---------- */
+
+/* Only lift cards on devices that can really hover (not touch screens) */
+@media (hover: hover) {
+  .card, .place-card { transition: transform 0.2s, box-shadow 0.2s; }
+  .card:hover, .place-card:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+  .btn:hover { background: var(--sea); border-color: var(--sea); color: #fff; }
+  .btn-ghost:hover { background: var(--ink); color: var(--taxi); border-color: var(--ink); }
+}
+
+/* Phones held sideways have very little height: keep the hero image short */
+@media (orientation: landscape) and (max-height: 500px) {
+  .hero-art img { max-height: 55vh; }
+}
+
+/* Respect the "reduce motion" setting */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}
+
+/* Printing: hide navigation, keep content readable */
+@media print {
+  .site-header, .skip-link, .banner, .actions { display: none; }
+  body { background: #fff; }
+  .hero, .section-dark { background-image: none; }
+  .card, .place-card, .plan-aside { box-shadow: none; }
+}
