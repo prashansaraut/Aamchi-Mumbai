@@ -1,46 +1,57 @@
 # Amchi Mumbai
 
-A fully responsive city guide to Mumbai's street food, landmark places and local train network. Built from scratch with semantic HTML5 and modern CSS only (no JavaScript, no frameworks) as the Week 2 task of the Yuva Intern frontend programme: implementation of responsive web design.
+A fully responsive city guide to Mumbai's street food, landmark places and local train network. Built from scratch with semantic HTML5 and modern CSS only (no JavaScript, no frameworks) as the Week 2 task of the Yuva Intern frontend programme (implementation of responsive web design).
 
-The design takes its look from the city itself: the black-and-yellow kaali-peeli taxi (checker stripes, hard shadows), Devanagari lettering, Warli folk-art patterns and a sunset over the Arabian Sea.
+The design takes its look from the city itself: the black-and-yellow *kaali-peeli* taxi (checker stripes, hard shadows), Devanagari lettering and a sunset over the Arabian Sea.
 
 ## Responsive techniques used
 
-- **Mobile-first media queries (600px, 900px, 1200px):** control columns, navigation and footer layout across the whole stylesheet.
-- **Fluid typography with `clamp()`:** headings and body text scale smoothly with the screen.
-- **Intrinsic grids (`auto-fit` with `minmax()`):** the "At a glance" strip and the "Getting around" cards reflow on their own, with no media query.
-- **Fixed-column grids that change at breakpoints:** food cards go from 1 to 2 to 3 columns.
-- **Container queries (`@container`):** each place card switches to a side-by-side layout based on its own width, not the screen width.
-- **Art-directed images (`<picture>`):** the hero shows a tall crop on phones and a wide crop on larger screens.
-- **Resolution switching (`srcset` and `sizes`):** the Marine Drive banner loads a 480, 800 or 1200px wide image.
-- **Fluid images:** `max-width: 100%` and `height: auto` on every image, with width and height attributes set to avoid layout shift. The train illustration is cropped, not squashed, on narrow screens.
-- **Responsive table:** the train lines turn into stacked cards on phones and a real table from 600px.
-- **Fluid spacing:** `min()`, `clamp()` and CSS variables control page gutters and section spacing.
-- **Feature queries:** `hover: hover`, `orientation: landscape`, `prefers-reduced-motion` and `print`.
-- **Accessibility:** skip link, semantic landmarks, labelled sections, visible focus styles and reduced-motion support.
+| Technique | Where it is used |
+|---|---|
+| Mobile-first media queries (600px, 900px, 1200px) | Whole stylesheet: columns, navigation, footer |
+| Fluid typography with `clamp()` | Headings and body text scale smoothly with the screen |
+| Flexible grids (`auto-fit` with `minmax()`) | "At a glance" strip (two tidy columns between 600 and 899px) |
+| Fixed-column grids that change at breakpoints | Food cards: 1, 2 then 3 columns |
+| Container queries (`@container`) | Place cards switch to a side-by-side layout based on their own width |
+| Art-directed images (`<picture>`) | Hero shows a tall crop on phones and a wide crop on larger screens |
+| Resolution switching (`srcset` and `sizes`) | Marine Drive banner loads 480, 800 or 1200px wide |
+| Fluid images (`max-width: 100%`, `height: auto`) | All images, with width and height set to avoid layout shift |
+| Intrinsic grid (`auto-fit`, no media query) | "Getting around" cards reflow from 1 to 3 columns on their own |
+| Responsive table | Train lines turn into stacked cards on phones |
+| Fluid spacing (`min()`, `clamp()`, CSS variables) | Page gutters and section spacing |
+| Feature queries | `hover: hover`, `orientation: landscape`, `prefers-reduced-motion`, `print` |
+| Accessibility | Skip link, semantic landmarks, labelled sections, visible focus styles, `prefers-reduced-motion` |
 
 ## Breakpoints
 
-- **Under 600px:** one column, navigation links wrap into pill buttons, stacked train cards.
-- **600px and up:** two-column food cards, a real train table, horizontal place cards.
-- **900px and up:** sticky one-row navigation bar, three-column food cards, two-column places, sticky sidebar.
-- **1200px and up:** three-column places grid and wider spacing.
+| Range | Layout |
+|---|---|
+| Under 600px | One column, navigation links wrap into pill buttons, stacked train cards |
+| 600px and up | Two-column food cards, real train table, horizontal place cards |
+| 900px and up | Sticky one-row navigation bar, three-column food cards, two-column places, sticky sidebar |
+| 1200px and up | Three-column places grid, wider spacing |
 
 The footer shows which layout is currently active, which makes testing easier.
+
+## Testing
+
+Checked at 11 viewport widths from 320px to 1920px (phones, tablets, laptops, desktops), in landscape on a phone, at 200% zoom and in print preview. No horizontal scrolling at any size. `html-validate` reports no HTML errors and an axe-core accessibility scan reports no violations. Full details are in the Week 2 report.
 
 ## Assets
 
 All artwork was created for this project as scalable SVG, so it stays sharp at any screen size and weighs very little.
 
-- **Food illustrations (6):** `assets/food/` for the menu cards (vada pav, pav bhaji, misal pav, bhel puri, bun maska, Irani chai).
-- **Place illustrations (6):** `assets/places/` for the place cards (Gateway of India, Marine Drive, Elephanta Caves, CSMT, Haji Ali, Sanjay Gandhi National Park).
-- **Hero artwork (2 crops):** `assets/hero-tall.svg` and `assets/hero-wide.svg`, art-directed with `<picture>`.
-- **Banner art (3 sizes):** `assets/marine-480.jpg`, `assets/marine-800.jpg` and `assets/marine-1200.jpg`, used for resolution switching with `srcset`.
-- **Local train:** `assets/local-train.svg` in the train section.
-- **Kaali-peeli taxi:** `assets/taxi.svg` in the quick tips panel.
-- **Transport icons (6):** `assets/icons/` for the "Getting around" cards.
-- **Warli folk-art patterns (2):** `assets/warli-ink.svg` and `assets/warli-light.svg` as tiled backgrounds.
-- **Favicon and share image:** `assets/favicon.svg` and `assets/og-image.png` for the browser tab and link previews.
+| Asset | Files | Used for |
+|---|---|---|
+| Food illustrations (6) | `assets/food/` | Menu cards: vada pav, pav bhaji, misal pav, bhel puri, bun maska, Irani chai |
+| Place illustrations (6) | `assets/places/` | Place cards: Gateway of India, Marine Drive, Elephanta Caves, CSMT, Haji Ali, Sanjay Gandhi National Park |
+| Hero artwork (2 crops) | `assets/hero-tall.svg`, `assets/hero-wide.svg` | Art-directed with `<picture>` |
+| Banner photo-style art (3 sizes) | `assets/marine-480.jpg`, `-800.jpg`, `-1200.jpg` | Resolution switching with `srcset` and `sizes` |
+| Local train | `assets/local-train.svg` | Train section, cropped on narrow screens |
+| Kaali-peeli taxi | `assets/taxi.svg` | Quick tips panel |
+| Transport icons (6) | `assets/icons/` | Getting around cards |
+| Warli folk-art patterns (2) | `assets/warli-ink.svg`, `assets/warli-light.svg` | Tiled backgrounds on the hero and train section |
+| Favicon and share image | `assets/favicon.svg`, `assets/og-image.png` | Browser tab and link previews |
 
 ## Project structure
 
